@@ -103,9 +103,17 @@ public static class DeckContants
         new() { Uri = "https://imgflip.com/s/meme/X-X-Everywhere.jpg" },
         new() { Uri = "https://imgflip.com/s/meme/Y-U-No.jpg" },
         new() { Uri = "https://imgflip.com/s/meme/Yall-Got-Any-More-Of-That.jpg" },
-        new() { Uri = "https://imgflip.com/s/meme/Yo-Dawg-Heard-You.jpg" }
+        new() { Uri = "https://imgflip.com/s/meme/Yo-Dawg-Heard-You.jpg" },
+        new() { Uri = "https://memepedia.ru/wp-content/uploads/2019/08/screenshot_18-2.png" },
+        new() { Uri = "https://memepedia.ru/wp-content/uploads/2019/07/screenshot_9-1.png" },
+        new() { Uri = "https://memepedia.ru/wp-content/uploads/2018/11/mozhno-nenado-shablon.jpg" },
+        new() { Uri = "https://memepedia.ru/wp-content/uploads/2018/09/mem-proizoshel-trolling-3.jpg" },
+        new() { Uri = "https://memepedia.ru/wp-content/uploads/2018/03/bund-1-768x577.jpg" },
+        new() { Uri = "https://memepedia.ru/wp-content/uploads/2017/06/what-twist.jpg" },
+        new() { Uri = "https://memepedia.ru/wp-content/uploads/2016/08/Twitter-when-you-see-ur-ex-gf-83e02d.png" },
+        new() { Uri = "https://memepedia.ru/wp-content/uploads/2017/04/%D0%B5%D0%B1%D0%B0%D1%82%D1%8C-%D1%82%D1%8B-%D0%BB%D0%BE%D1%85-%D0%BE%D1%80%D0%B8%D0%B3%D0%B8%D0%BD%D0%B0%D0%BB.jpg" },
     };
-
+    
     public static IReadOnlyCollection<StatementCard> StatementCards => new List<StatementCard>
     {
         new() { Statement = "Твое ебало когда насрал в подвале" },
@@ -126,5 +134,19 @@ public static class DeckContants
         new() { Statement = "Когда вор вламывается в твой дом в надежде найти там деньги" },
         new() { Statement = "Когда бэкенд говна" },
         new() { Statement = "Когда пропустил обучение в игре" },
+        new() { Statement = "Когда жидко пукнул" },
+        new() { Statement = "Когда таксист расказывает про свой бизнес" },
+        new() { Statement = "Когда Никита не съел растишку" },
+        new() { Statement = "Когда биткоин упал" },
+        new() { Statement = "Когда никто не идет играть в Доку 2" },
+        new() { Statement = "Когда робот пылесос размазал кошачье говно по всему полу" },
+        new() { Statement = "Когда улитка заходит в бар" },
+        new() { Statement = "Когда сгорела майнинг ферма" },
+        new() { Statement = "Когда сдох от ковида" },
+        new() { Statement = "Когда к тебе в баре подкатывает милфа" },
+        new() { Statement = "Когда на маленьком плоту" },
+        new() { Statement = "Когда братишка покушать тебе принес" },
+        new() { Statement = "Когда заскамил мамонта" },
+        new() { Statement = "Когда ты иронично неироничен" },
     };
 }

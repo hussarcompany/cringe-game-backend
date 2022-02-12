@@ -1,4 +1,4 @@
-
+﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CringeGame.App", "CringeGame.App\CringeGame.App.csproj", "{FDE42C60-E7A5-4162-848E-2AA017398716}"
 EndProject
@@ -19,6 +19,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CringeGame.Abstractions", "CringeGame.Abstractions\CringeGame.Abstractions.csproj", "{12554E3E-BA38-456A-8509-DEB520238A29}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CringeGame.Core", "CringeGame.Core\CringeGame.Core.csproj", "{C3C65773-FB5A-4C3E-87BB-51D99139D164}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CringeGame.Test", "CringeGame.Test\CringeGame.Test.csproj", "{D71AE318-2C92-4620-84B1-EE2DC399C723}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -62,6 +64,10 @@ Global
 		{C3C65773-FB5A-4C3E-87BB-51D99139D164}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C3C65773-FB5A-4C3E-87BB-51D99139D164}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C3C65773-FB5A-4C3E-87BB-51D99139D164}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D71AE318-2C92-4620-84B1-EE2DC399C723}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D71AE318-2C92-4620-84B1-EE2DC399C723}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D71AE318-2C92-4620-84B1-EE2DC399C723}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D71AE318-2C92-4620-84B1-EE2DC399C723}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{9B6CB4D0-26D7-491D-9C7A-88CDD14880AC} = {1402E375-2F22-4DC0-BF77-BBE7600A11B9}
