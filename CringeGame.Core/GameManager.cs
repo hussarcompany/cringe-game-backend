@@ -9,16 +9,19 @@ public class GameManager: IGameManager
 
     public Game CreateGameFor(List<Player> players)
     {
-        var game = new Game
-        {
-            Players = players
-        };
+        var game = new Game(players);
         _games.Add(game);
         return game;
     }
 
     public Game GetGame(Guid gameId)
     {
-        return _games.FirstOrDefault(x => x.Id == gameId);
+        var game = _games.FirstOrDefault(x => x.Id == gameId);
+        if (game == null)
+        {
+            throw new Exception($"Не найдена игра {gameId}");
+        }
+        
+        return game;
     }
 }

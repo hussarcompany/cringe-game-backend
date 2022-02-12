@@ -5,7 +5,7 @@
 /// </summary>
 public class PlayerDto
 {
-    public string ConnectionId { get; set; }
+    public Guid Id { get; set; }
     
     /// <summary>
     /// Имя.

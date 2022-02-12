@@ -27,5 +27,4 @@ public partial class MainHub: ModulesEntryHub
         await ModuleHubsOnDisconnectedAsync(exception);
         Logger.LogInformation("Отключился пользователь {ConnectionId}", Context.ConnectionId);
     }
-    
 }

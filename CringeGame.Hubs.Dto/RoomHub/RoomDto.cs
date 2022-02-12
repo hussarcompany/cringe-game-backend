@@ -3,7 +3,7 @@
 /// <summary>
 /// Игровая комната.
 /// </summary>
-public class GetRoomDto
+public class RoomDto
 {
     /// <summary>
     /// Идентификатор.
@@ -24,11 +24,6 @@ public class GetRoomDto
     /// Текущее количество игроков.
     /// </summary>
     public int PlayersCountCurrent { get; set; }
-
-    /// <summary>
-    /// Состояние.
-    /// </summary>
-    public RoomState State { get; set; }
     
     /// <summary>
     /// Список игроков.

@@ -1,9 +1,9 @@
 using System.Reflection;
+using System.Text.Json.Serialization;
 using CringeGame.Abstractions;
 using CringeGame.App;
 using CringeGame.Core;
 using CringeGame.Hubs;
-using CringeGame.Hubs.Abstractions.ClientHubs;
 using Microsoft.OpenApi.Models;
 using Serilog;
 using SignalR.Modules;
@@ -17,11 +17,11 @@ builder.Services.AddSingleton<IGameManager, GameManager>();
 builder.Services.AddSignalR();
 builder.Services.AddSignalRModules<MainHub>();
 builder.Services.AddAutoMapper(typeof(MapperProfile));
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("game-api", new OpenApiInfo { Title = "Cringe Game SignalR API", Version = "v1" });
-    options.DocumentFilter<SignalRSwaggerGen.SignalRSwaggerGen>(new List<Assembly> { typeof(MainHub).Assembly, typeof(IGameClientHub).Assembly });
+    options.DocumentFilter<SignalRSwaggerGen.SignalRSwaggerGen>(new List<Assembly> { typeof(MainHub).Assembly, typeof(HubsAssemblyMarker).Assembly });
 });
 
 builder.Services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
@@ -34,7 +34,6 @@ builder.Services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
 var app = builder.Build();
 
 app.UseCors("MyPolicy");
-app.MapHub<TestHub>("/test");
 app.MapHub<MainHub>("/game");
 
 app.UseSwagger();

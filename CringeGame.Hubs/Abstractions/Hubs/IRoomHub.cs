@@ -4,11 +4,11 @@ namespace CringeGame.Hubs.Abstractions.Hubs;
 
 public interface IRoomHub
 {
-    Task<GetRoomDto> CreateRoom(CreateRoomDto createRoomDto);
+    Task<RoomDto> CreateRoom(CreateRoomDto createRoomDto);
 
-    Task JoinRoom(JoinRoomDto joinRoomDto);
+    Task<PlayerDto> JoinRoom(JoinRoomDto joinRoomDto);
 
     Task LeaveRoom(LeaveRoomDto leaveRoomDto);
 
-    Task<List<GetRoomDto>> GetRooms();
+    Task<List<RoomDto>> GetRooms();
 }

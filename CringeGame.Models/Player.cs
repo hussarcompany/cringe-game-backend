@@ -2,7 +2,17 @@
 
 public class Player
 {
-    public string ConnectionId { get; set; }
+    public Guid Id { get; } = Guid.NewGuid();
     
+    public string ConnectionId { get; set; }
+
     public string Name { get; set; }
+    
+    public List<MemeCard> Hand { get; set; }
+    
+    public uint Points { get; set; }
+    
+    public bool HasAction { get; set; }
+    
+    public MemeCard SelectedCard { get; set; }
 }

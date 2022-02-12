@@ -1,6 +1,6 @@
 ﻿namespace CringeGame.Hubs.Dto.RoomHub;
 
-public class GameStartDto
+public class RoomGameDto
 {
     public Guid Id { get; set; }
     

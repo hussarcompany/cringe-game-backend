@@ -1,8 +1,6 @@
 ﻿namespace CringeGame.Hubs.Dto.GameHub;
 
-public class VoteDto
+public class ReadyDto
 {
     public Guid GameId { get; set; }
-    
-    public Guid UserId { get; set; }
 }

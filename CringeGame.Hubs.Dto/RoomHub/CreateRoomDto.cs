@@ -13,5 +13,5 @@ public class CreateRoomDto
     /// <summary>
     /// Максимальное количество игроков.
     /// </summary>
-    public int PlayersCount { get; set; }
+    public uint PlayersCount { get; set; }
 }

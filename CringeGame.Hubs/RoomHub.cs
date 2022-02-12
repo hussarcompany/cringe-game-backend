@@ -4,6 +4,7 @@ using CringeGame.Hubs.Abstractions.ClientHubs;
 using CringeGame.Hubs.Abstractions.Hubs;
 using CringeGame.Hubs.Dto.RoomHub;
 using CringeGame.Models;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
 using SignalR.Modules;
 
@@ -30,92 +31,105 @@ public class RoomHub : ModuleHub<IRoomClientHub>, IRoomHub
         _gameManager = gameManager;
     }
 
-    public async Task<GetRoomDto> CreateRoom(CreateRoomDto createRoomDto)
+    public async Task<RoomDto> CreateRoom(CreateRoomDto createRoomDto)
     {
+        await CreateRoomSemaphore.WaitAsync();
         try
         {
             _logger.LogInformation("Попытка создания комнаты пользователем {ConnectionId}", Context.ConnectionId);
             var room = _mapper.Map<Room>(createRoomDto);
-            await CreateRoomSemaphore.WaitAsync();
             Rooms.Add(room);
-            CreateRoomSemaphore.Release();
             _logger.LogInformation("Создана комната {RoomId}, пользователем {ConnectionId}", room.Id,
                 Context.ConnectionId);
-            return _mapper.Map<GetRoomDto>(room);
+            return _mapper.Map<RoomDto>(room);
         }
         catch (Exception e)
         {
             _logger.LogError(e, "Ошибка при создании комнаты пользователем {ConnectionId}", Context.ConnectionId);
-            CreateRoomSemaphore.Release();
             throw;
+        }
+        finally
+        {
+            CreateRoomSemaphore.Release();
         }
     }
 
-    public async Task JoinRoom(JoinRoomDto joinRoomDto)
+    public async Task<PlayerDto> JoinRoom(JoinRoomDto joinRoomDto)
     {
+        await JoinLeaveRoomSemaphore.WaitAsync();
         try
         {
             _logger.LogInformation("Пользователь {ConnectionId} пытается зайти в комнату {RoomId}",
                 Context.ConnectionId, joinRoomDto.RoomId);
-            await JoinLeaveRoomSemaphore.WaitAsync();
+            if (Rooms.Any(x => x.Players.Any(p => p.ConnectionId == Context.ConnectionId)))
+            {
+                throw new HubException($"Пользователь {Context.ConnectionId} уже есть в одной из комнат.");
+            }
+            
             var room = Rooms.FirstOrDefault(x => x.Id == joinRoomDto.RoomId);
             if (room == null || room.PlayersCountCurrent == room.PlayersCount)
             {
-                throw new Exception("Не найдена комната, либо нет мест.");
+                throw new HubException("Не найдена комната, либо нет мест.");
             }
 
             if (room.Players.Any(x => x.ConnectionId == Context.ConnectionId))
             {
-                throw new Exception("Пользователь уже находится в этой комнате.");
+                throw new HubException("Пользователь уже находится в этой комнате.");
             }
 
             room.PlayersCountCurrent += 1;
-            room.Players.Add(new Player
+            var player = new Player
             {
                 ConnectionId = Context.ConnectionId,
                 Name = joinRoomDto.UserName
-            });
+            };
+            room.Players.Add(player);
+            await Clients.Clients(room.Players.Select(x => x.ConnectionId).ToList()).UpdateRoom(_mapper.Map<RoomDto>(room));
             if (room.PlayersCountCurrent == room.PlayersCount)
             {
                 var game = _gameManager.CreateGameFor(room.Players);
-                foreach (var player in room.Players)
+                foreach (var roomPlayer in room.Players)
                 {
-                    await Groups.AddToGroupAsync(player.ConnectionId, game.Id.ToString());
+                    await Groups.AddToGroupAsync(roomPlayer.ConnectionId, game.Identifier);
                 }
-                
-                await Clients.Group(game.Id.ToString()).GameStart(_mapper.Map<GameStartDto>(game));
+
+                await Clients.Group(game.Identifier).StartGame(_mapper.Map<RoomGameDto>(game));
+                Rooms.Remove(room);
             }
 
-            JoinLeaveRoomSemaphore.Release();
             _logger.LogInformation("Пользователь {ConnectionId} зашел в комнату {RoomId}", Context.ConnectionId,
                 room.Id);
+            return _mapper.Map<PlayerDto>(player);
         }
         catch (Exception e)
         {
             _logger.LogError(e, "Ошибка при попытке зайти в комнату {RoomId}, пользователем {ConnectionId}",
                 joinRoomDto.RoomId, Context.ConnectionId);
-            JoinLeaveRoomSemaphore.Release();
             throw;
+        }
+        finally
+        {
+            JoinLeaveRoomSemaphore.Release();
         }
     }
 
     public async Task LeaveRoom(LeaveRoomDto leaveRoomDto)
     {
+        await JoinLeaveRoomSemaphore.WaitAsync();
         try
         {
             _logger.LogInformation("Пользователь {ConnectionId} пытается выйти из комнаты {RoomId}",
                 Context.ConnectionId, leaveRoomDto.RoomId);
-            await JoinLeaveRoomSemaphore.WaitAsync();
             var room = Rooms.FirstOrDefault(x => x.Id == leaveRoomDto.RoomId);
             var currentPlayer = room?.Players.FirstOrDefault(x => x.ConnectionId == Context.ConnectionId);
             if (currentPlayer == null)
             {
-                return;
+                throw new HubException("Не найдена комната, либо пользователя нет в комнате.");
             }
 
             room.PlayersCountCurrent -= 1;
             room.Players.Remove(currentPlayer);
-            JoinLeaveRoomSemaphore.Release();
+            await Clients.Clients(room.Players.Select(x => x.ConnectionId).ToList()).UpdateRoom(_mapper.Map<RoomDto>(room));
             _logger.LogInformation("Пользователь {ConnectionId} вышел из комнаты {RoomId}", Context.ConnectionId,
                 room.Id);
         }
@@ -123,15 +137,18 @@ public class RoomHub : ModuleHub<IRoomClientHub>, IRoomHub
         {
             _logger.LogError(e, "Ошибка при попытке выйти из комнаты {RoomId}, пользователем {ConnectionId}",
                 leaveRoomDto.RoomId, Context.ConnectionId);
-            JoinLeaveRoomSemaphore.Release();
             throw;
+        }
+        finally
+        {
+            JoinLeaveRoomSemaphore.Release();
         }
     }
 
-    public Task<List<GetRoomDto>> GetRooms()
+    public Task<List<RoomDto>> GetRooms()
     {
         return Task.FromResult(Rooms
-            .Select(x => _mapper.Map<GetRoomDto>(x))
+            .Select(x => _mapper.Map<RoomDto>(x))
             .OrderByDescending(x => x.PlayersCountCurrent)
             .ToList()
         );

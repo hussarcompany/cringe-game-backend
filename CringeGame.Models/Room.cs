@@ -10,7 +10,5 @@ public class Room
     
     public int PlayersCountCurrent { get; set; }
 
-    public RoomState State { get; set; }
-
     public List<Player> Players { get; } = new();
 }

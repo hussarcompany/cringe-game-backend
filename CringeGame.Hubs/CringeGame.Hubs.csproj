@@ -8,13 +8,18 @@
 
     <ItemGroup>
       <ProjectReference Include="..\CringeGame.Abstractions\CringeGame.Abstractions.csproj" />
-      <ProjectReference Include="..\CringeGame.Hubs.Abstractions\CringeGame.Hubs.Abstractions.csproj" />
+      <ProjectReference Include="..\CringeGame.Hubs.Dto\CringeGame.Hubs.Dto.csproj" />
       <ProjectReference Include="..\SignalR.Modules\SignalR.Modules.csproj" />
     </ItemGroup>
 
     <ItemGroup>
       <PackageReference Include="AutoMapper" Version="11.0.0" />
       <PackageReference Include="Microsoft.AspNetCore.SignalR.Core" Version="1.1.0" />
+      <PackageReference Include="SignalRSwaggerGen" Version="2.5.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Abstractions" />
     </ItemGroup>
 
 </Project>
