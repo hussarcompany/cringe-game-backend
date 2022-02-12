@@ -14,7 +14,7 @@ builder.WebHost.ConfigureKestrel(options => options.ListenAnyIP(int.Parse(port))
 builder.WebHost.UseSerilog((ctx, cfg) => cfg.ReadFrom.Configuration(ctx.Configuration));
 
 builder.Services.AddSingleton<IGameManager, GameManager>();
-builder.Services.AddSignalR();
+builder.Services.AddSignalR(x => x.ClientTimeoutInterval = TimeSpan.FromMinutes(1));
 builder.Services.AddSignalRModules<MainHub>();
 builder.Services.AddAutoMapper(typeof(MapperProfile));
 builder.Services.AddControllers().AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
